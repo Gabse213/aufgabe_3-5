@@ -1,6 +1,7 @@
 # Paket für Bearbeitung von Tabellen
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 
 # Paket
@@ -21,40 +22,56 @@ def read_my_csv():
     df ["time"] = time
     return df
 
-max_hr = float(input("Gib deine maximale Herzfrequenz (Max HR) ein: "))
-zone1 = (round(max_hr * 0.50), round(max_hr * 0.60))
-zone2 = (round(max_hr * 0.60), round(max_hr * 0.70))
-zone3 = (round(max_hr * 0.70), round(max_hr * 0.80))
-zone4 = (round(max_hr * 0.80), round(max_hr * 0.90))
-zone5 = (round(max_hr * 0.90), round(max_hr * 1.00))
+def erstelle_hr_zonen_plot(df, max_hr):
+    zonen = {
+        "Zone 1": (max_hr * 0.50, max_hr * 0.60),
+        "Zone 2": (max_hr * 0.60, max_hr * 0.70),
+        "Zone 3": (max_hr * 0.70, max_hr * 0.80),
+        "Zone 4": (max_hr * 0.80, max_hr * 0.90),
+        "Zone 5": (max_hr * 0.90, max_hr * 1.00),
+    }
 
+    farben = {
+        "Zone 1": "blue",
+        "Zone 2": "green",
+        "Zone 3": "yellow",
+        "Zone 4": "orange",
+        "Zone 5": "red",
+    }
 
-print(zone1)
+    plt.figure(figsize=(12, 6))
 
+    zeit = df["time"]
+    hf = df["HeartRate"]
 
-def make_plot(df):
-    
+    for i in range(len(zeit) - 1):
+        wert = hf[i]
+        for zone, (low, high) in zonen.items():
+            if low <= wert < high:
+                plt.plot(zeit[i:i+2], hf[i:i+2], color=farben[zone], linewidth=2)
+                break
 
-    # Erstellte einen Line Plot, der ersten 2000 Werte mit der Zeit aus der x-Achse
-    fig = px.line(df.head(2000), x= "time", y=["PowerOriginal", "HeartRate"])
-    return fig
+    for zone, (low, high) in zonen.items():
+        plt.axhspan(low, high, color=farben[zone], alpha=0.05, label=zone)
+
+    plt.title("Herzfrequenzverlauf mit Trainingszonen")
+    plt.xlabel("Zeit (Index)")
+    plt.ylabel("Herzfrequenz (bpm)")
+    plt.grid(True)
+    plt.legend(loc="upper left")
+    plt.tight_layout()
+    plt.show()
+
 
 if __name__=="__main__":
     
     # Lese die Daten ein
     df = read_my_csv()
-    print(df.head())
-    fig = make_plot(df)
-    # Zeige den Plot an
-    dfzone1 = df["HeartRate"] == zone1
-    filter2 = df["HeartRate"] == "zone2"
-    filter3 = df["HeartRate"] == "zone3"
-    filter4 = df["HeartRate"] == "zone4"
-    filter5 = df["HeartRate"] == "zone5"
-    df = df.where(dfzone1 | filter2 | filter3 | filter4 | filter5)
-    fig.show()
-#df = read_my_csv()
-#fig = make_plot(df)
-
-#fig.show()
+    if df is not None:
+        try:
+            max_hr = float(input("Gib deine maximale Herzfrequenz ein: "))
+            erstelle_hr_zonen_plot(df, max_hr)
+        except ValueError:
+            print("Bitte eine gültige Zahl für die maximale Herzfrequenz eingeben.")
+            exit()
 
