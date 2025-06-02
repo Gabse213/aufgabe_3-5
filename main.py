@@ -1,9 +1,11 @@
 import streamlit as st
 import read_data # Ergänzen Ihr eigenes Modul
 from PIL import Image
+from read_pandas import read_my_csv, erstelle_hr_zonen_plot
 
 # Eine Überschrift der ersten Ebene
-st.write("# EKG APP")
+st.write("# Herzfrequenzanalyse")
+
 
 # Eine Überschrift der zweiten Ebene
 st.write("## Versuchsperson auswählen")
@@ -36,3 +38,20 @@ if st.session_state.current_user in person_names:
 # Öffne das Bild und Zeige es an
 image = Image.open(st.session_state.picture_path)
 st.image(image, caption=st.session_state.current_user)
+
+#Maximale Herzfrequenz eingeben
+max_hr = st.number_input("Gib deine maximale Herzfrequenz (Max HR) ein:",
+                        min_value=100, max_value=225, value=190)
+
+# Aktivitätsdaten laden
+try:
+    df = read_my_csv()
+    st.success("Daten erfolgreich geladen!")
+    
+    # Plot erzeugen
+    erstelle_hr_zonen_plot(df, max_hr)
+
+except FileNotFoundError:
+    st.error("Die Aktivitätsdatei konnte nicht gefunden werden.")
+except Exception as e:
+    st.error(f"Fehler beim Einlesen oder Plotten: {e}")
