@@ -4,7 +4,7 @@ from PIL import Image
 from read_pandas import read_my_csv, erstelle_hr_zonen_plot
 
 # Eine Überschrift der ersten Ebene
-st.write("# Herzfrequenzanalyse")
+st.write("# EKG-App")
 
 
 # Eine Überschrift der zweiten Ebene
@@ -39,6 +39,8 @@ if st.session_state.current_user in person_names:
 image = Image.open(st.session_state.picture_path)
 st.image(image, caption=st.session_state.current_user)
 
+# Eine Überschrift der zweiten Ebene
+st.write("## Herzfrequenz-/Leistungsdiagramm")
 #Maximale Herzfrequenz eingeben
 max_hr = st.number_input("Gib deine maximale Herzfrequenz (Max HR) ein:",
                         min_value=100, max_value=225, value=190)
