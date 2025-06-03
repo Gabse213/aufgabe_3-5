@@ -97,7 +97,10 @@ def erstelle_hr_zonen_plot(df, max_hr):
     #plt.show()
     st.pyplot(fig)
 
-
+def berechne_durchschnittswerte(df):
+    durchschnitt_hf = df["HeartRate"].mean()
+    durchschnitt_leistung = df["PowerOriginal"].mean()
+    return durchschnitt_hf, durchschnitt_leistung
 
 if __name__=="__main__":
     
