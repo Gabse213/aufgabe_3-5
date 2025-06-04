@@ -48,13 +48,15 @@ def plot_powercurve(df,title):
 if __name__ == "__main__":
     
 
-    df_1=load_data()
-    print(df_1.head())
-    print(df_1["PowerOriginal"])
-    best_effort=find_best_effort(df_1["PowerOriginal"],120)
-    print(best_effort)
-    df_2 = create_powercurve_df(df_1)
-    print(df_2)
+    #df_1=load_data()
+    #print(df_1.head())
+    #print("df_1[Poweroriginal] ist:",df_1["PowerOriginal"])
+    #best_effort=find_best_effort(df_1["PowerOriginal"],120)
+    #print("besteffort ist:",best_effort)
+    #df_2 = create_powercurve_df(df_1)
+    #print("df2ist:",df_2)
+    #plot_powercurve(df_2,"Leistungsdiagramm")
+
+    
+    df_2=create_powercurve_df(load_data())
     plot_powercurve(df_2,"Leistungsdiagramm")
-
-
