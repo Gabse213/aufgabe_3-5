@@ -2,7 +2,7 @@ import streamlit as st
 import read_data # Ergänzen Ihr eigenes Modul
 from PIL import Image
 from read_pandas import read_my_csv, erstelle_hr_zonen_plot, berechne_durchschnittswerte
-from power_curve import find_best_effort, plot_best_effort_curve, load_data
+
 
 # Eine Überschrift der ersten Ebene
 st.write("# EKG-App")
@@ -57,7 +57,7 @@ try:
         # Durchschnittswerte berechnen und anzeigen
     durchschnitt_hf, durchschnitt_leistung = berechne_durchschnittswerte(df)
 
-    st.subheader("📊 Durchschnittswerte")
+    st.subheader(" Durchschnittswerte")
     col1, col2 = st.columns(2)
     col1.metric("Ø Herzfrequenz (bpm)", f"{durchschnitt_hf:.1f}")
     col2.metric("Ø Leistung (W)", f"{durchschnitt_leistung:.1f}")
@@ -67,8 +67,3 @@ except FileNotFoundError:
     st.error("Die Aktivitätsdatei konnte nicht gefunden werden.")
 except Exception as e:
     st.error(f"Fehler beim Einlesen oder Plotten: {e}")
-
-
-best_effort = find_best_effort()
-print("Best Effort:", best_effort)
-plot_best_effort_curve(best_effort)

@@ -1,6 +1,7 @@
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
-
+import re
 def load_data(path='data/activities/activity.csv'):
     df = pd.read_csv(path)
     t_end = len(df)
@@ -22,32 +23,26 @@ def create_powercurve_df(df, window_sizes=[1, 5, 10, 30, 60, 300, 600, 1800,3600
 
 def find_best_effort(series, window_size):
     best_effort=series.rolling(window=window_size).mean().max()
-
     return best_effort
 
-def plot_best_effort_curve(df_2):
-    #durations = df_2(window_size)
-    #powers = list(all_effort.values())
 
-    fig, ax = plt.subplots(figsize=(10, 5))
+def plot_powercurve(df,title):
+    x=df.iloc[:,0]
+    y=df.iloc[:,1]
+
+    fig, ax= plt.subplots(figsize=(10, 6))
+    ax.plot(x, y, marker='o')
     
-    ax.plot(df_2, marker="o")
-    ax.set_xscale("log")
-    
-    xtick_labels = []
-    ax.set_xticks()
-    ax.set_xticklabels(xtick_labels)
-    
-    ax.set_xlabel("Dauer")
-    ax.set_ylabel("Power (W)")
-    ax.set_title("Power Curve")
-    ax.grid(True)
-    
-    fig.tight_layout()
+    xlabel = x.name if x.name else "x"
+    ylabel = y.name if y.name else "y"
+
+    plt.title(title)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.grid(True)
     plt.show()
-    fig.savefig("power_curve.png")  # Optional: Speichere die Grafik als PNG-Datei
-
-    return fig  # Optional: damit du die Figure später speichern oder weiterverwenden kannst
+    fig.savefig(title.replace(' ', '_')+".png")
+    return fig 
 
 
 if __name__ == "__main__":
@@ -58,9 +53,8 @@ if __name__ == "__main__":
     print(df_1["PowerOriginal"])
     best_effort=find_best_effort(df_1["PowerOriginal"],120)
     print(best_effort)
-    versuch =create_powercurve_df(df_1)
-    print(versuch)
-    plot_best_effort_curve
-
+    df_2 = create_powercurve_df(df_1)
+    print(df_2)
+    plot_powercurve(df_2,"Leistungsdiagramm")
 
 
