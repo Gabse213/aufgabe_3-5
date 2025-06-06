@@ -34,6 +34,8 @@ if person_data and "picture_path" in person_data:
 image = Image.open(st.session_state.picture_path)
 st.image(image, caption=selected_person_name)
 
+st.write("## EKG-Test")
+
 # EKG-Test-Auswahl (wenn Person gefunden)
 if person_data:
     ekg_tests = person_data.get("ekg_tests", [])
@@ -44,7 +46,7 @@ if person_data:
     ekg_test_options = [f"EKG ID {test['id']} - {test['date']}" for test in ekg_tests_sorted]
 
     # Standardmäßig neuester EKG-Test ausgewählt (höchste ID)
-    selected_ekg_test = st.selectbox("EKG-Test auswählen", ekg_test_options, index=0)
+    selected_ekg_test = st.selectbox( "EKG-Test auswählen", ekg_test_options, index=0)
 
     if selected_ekg_test:
         # EKG-Test ID extrahieren
