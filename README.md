@@ -13,4 +13,4 @@ Um die App zu starten muss "streamlit run main.py" in der Console eingegeben wer
 ![alt text](screenshot2.png)
 
 ## Plot der Powercurve
-![alt text] (Leistungsdiagramm.png)
+![alt text](Leistungsdiagramm.png)
