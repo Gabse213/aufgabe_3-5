@@ -1,6 +1,6 @@
 import json
 import pandas as pd
-import matplotlib.pyplot as plt
+import plotly.express as px
 import numpy as np
 #from person import load_by_id, calc_max_heart_rate, calc_age
 
@@ -36,27 +36,25 @@ class EKGdata:
 
         if threshold is None:
             threshold = self.auto_threshold()
+    
+        # Plot mit den ersten 2000 Werten
+        self.fig = px.line(self.df.head(2000), x="Zeit in ms", y="Messwerte in mV")
 
-        # Daten vorbereiten
-        df_plot = self.df.head(2000)
+        # Peaks finden
         peaks = self.find_peaks(threshold, respacing_factor)
         peaks = [p for p in peaks if p < 2000]
-        peak_df = self.df.iloc[peaks]
 
-    # Plot erstellen
-        plt.figure(figsize=(12, 5))
-        plt.plot(df_plot["Zeit in ms"], df_plot["Messwerte in mV"], label="EKG-Signal")
-        plt.scatter(peak_df["Zeit in ms"], peak_df["Messwerte in mV"], color='red', label="Peaks")
+        # Peak-Daten für Scatterplot
+        peak_df = self.df.iloc[peaks][["Zeit in ms", "Messwerte in mV"]]
 
-        plt.xlabel("Zeit in ms")
-        plt.ylabel("Messwerte in mV")
-        plt.title("EKG Zeitreihe mit Peaks")
-        plt.legend()
-        plt.grid(True)
-        plt.tight_layout()
+        # Peaks als rote Marker hinzufügen
+        self.fig.add_scatter(x=peak_df["Zeit in ms"], y=peak_df["Messwerte in mV"],
+                         mode='markers', marker=dict(color='red', size=8),
+                         name='Peaks')
 
-    # Zeige den Plot direkt im Fenster
-        plt.show()
+        # Plot anzeigen
+        self.fig.show() # in streamlit öffnet sich ein neues Fenster dann jedesmal mit der vergrßerten Darstellung
+
 
     def find_peaks(self, threshold, respacing_factor=5):
         series=self.df['Messwerte in mV']
